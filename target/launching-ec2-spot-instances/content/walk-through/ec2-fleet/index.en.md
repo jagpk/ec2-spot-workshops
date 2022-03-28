@@ -19,9 +19,9 @@ EC2 Fleet can also be used in `instant` type or mode as a drop-in-replacement to
 
 #### EC2 Fleet example : Applying instance diversification on HPC tightly coupled workloads with EC2 Fleet of type instant
 
-{{% notice warning %}}
+:::alert{type=warning}
 Note that MPI workloads, specially those that run for hours and do not use check-pointing, are not appropriate for Spot Instances. Remember Spot Instances are suited for fault tolerant applications that can recover from the loss and replacement of one or more instances.
-{{% /notice %}}
+:::
 
 In this part of the workshop you launch an EC2 Fleet of type instant, a feature that is only available in EC2 Fleet. In instant mode EC2 Fleet places a synchronous one-time request for your desired capacity. In the API response, it returns the list of successfully launched instances and errors for those instances that could not be launched. Check this link for  information on request types [here](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-fleet-configuration-strategies.html#ec2-fleet-request-type).
 
@@ -94,9 +94,9 @@ cat <<EoF > ~/ec2-fleet-config.json
 EoF
 ```
 
-{{% notice info %}}
+:::alert{type=info}
 You may have noticed that you haven't included the `MaintenanceStrategies` structure, as specifying a replacement strategy is only possible with EC2 Fleet of type maintain.
-{{% /notice %}}
+:::
 
 The EC2 Fleet request specifies separately the target capacity for Spot and On-Demand Instances using the `OnDemandTargetCapacity` and `SpotTargetCapacity` fields inside the `TargetCapacitySpecification` structure. The value for `DefaultTargetCapacityType` specifies whether Spot or On-Demand Instances should be used to meet the `TotalTargetCapacity`.
 
@@ -129,9 +129,9 @@ aws ec2 describe-fleets --fleet-ids "${FLEET_ID}"
 ```
 
 
-{{% notice info %}}
+:::alert{type=info}
 EC2 Fleet has a `aws ec2 describe-fleet-history` and `aws ec2 describe-fleet-instances`, similar to Spot Fleet API. However, EC2 Fleet of type instant is not considered a regular fleet request. In fact, while for EC2 Fleet and Spot Fleet you have limits on the number of active fleets you can create, for EC2 Fleet in instant mode you can make as many calls as needed. In this regard think of it as a replacement of RunInstance API that implements Spot best practices.
-{{% /notice %}}
+:::
 
 
 To check the history of the fleet you can also check with the command:

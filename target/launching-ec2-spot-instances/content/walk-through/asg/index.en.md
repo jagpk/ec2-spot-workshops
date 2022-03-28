@@ -12,9 +12,9 @@ Amazon EC2 Auto Scaling helps you ensure that you have the correct number of Ama
 
 When adopting EC2 Spot Instances, our recommendation is to consider Auto Scaling group since it offers rich features including scale-in protection, health checks, lifecycle hooks, rebalance recommendation integration, warm pools, predictive scaling, and many more functionalities listed below.
 
-{{% notice info %}}
+:::alert{type=info}
 In the past, Auto Scaling groups used launch configurations. Applications using launch configurations should migrate to launch templates. With launch templates you can provision capacity across multiple instance types using both Spot Instances and On-Demand Instances to achieve the desired scale, performance, and cost optimization.
-{{% /notice %}}
+:::
 
 #### Auto Scaling group example: Using mixed instance groups with Spot and On-Demand capacity
 
@@ -105,9 +105,9 @@ aws autoscaling describe-auto-scaling-groups --auto-scaling-group-names EC2SpotW
 
 To describe one or more instances we use `describe-instances`. To retrieve all the Spot Instances that have been launched with the Auto Scaling group, we apply two filters: `instance-lifecycle` set to `spot` to retrieve only Spot Instances and the custom tag `aws:autoscaling:groupName` that must be set to `EC2SpotWorkshopASG`.
 
-{{% notice info %}}
+:::alert{type=info}
 When launching instances using an Auto Scaling group, the Auto Scaling group automatically adds a tag to the instances with a key of `aws:autoscaling:groupName` and a value of the name of the Auto Scaling group. We are going to use that tag to retrieve the instances that were launched by the ASG we just created. To learn more about Tagging lifecycle, review [this documentation](https://docs.aws.amazon.com/autoscaling/ec2/userguide/autoscaling-tagging.html#tag-lifecycle).
-{{% /notice %}}
+:::
 
 ```bash
 aws ec2 describe-instances --filters Name=instance-lifecycle,Values=spot Name=tag:aws:autoscaling:groupName,Values=EC2SpotWorkshopASG --query "Reservations[*].Instances[*].[InstanceId]" --output text
@@ -123,9 +123,9 @@ aws ec2 describe-instances --filters Name=tag:aws:autoscaling:groupName,Values=E
 
 {{% /expand %}}
 
-{{% notice info %}}
+:::alert{type=info}
 When adopting EC2 Spot Instances, our recommendation is to consider Auto Scaling group since it offers rich features including scale-in protection, health checks, lifecycle hooks, rebalance recommendation integration, warm pools, predictive scaling, and many more functionalities listed below.
-{{% /notice %}}
+:::
 
 
 #### Brief Summary of Auto Scaling group functionality

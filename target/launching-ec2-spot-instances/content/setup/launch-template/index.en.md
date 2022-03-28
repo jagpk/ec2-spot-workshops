@@ -9,13 +9,13 @@ include_toc: false
 In this chapter you create a [launch template](https://docs.aws.amazon.com/autoscaling/ec2/userguide/LaunchTemplates.html) 
 and use it to define launch parameters so that you do not have to specify them every time you launch an instance. A launch template includes the ID of the Amazon Machine Image (AMI), the instance type, a key pair, security groups, and other parameters used to launch EC2 instances. Launch template allows you to have multiple versions of a launch template. Every change to the launch template can be tracked and you can select which version to use as new changes are applied to the template. This can be used for governance as well as to manage approved upgrades to, for example, Auto Scaling groups. If you do not specify a version, the default version is used.
 
-{{% notice info %}}
+:::alert{type=info}
 We recommend that you use launch templates instead of launch configurations to ensure that you're accessing the latest features and improvements. Not all Amazon EC2 Auto Scaling features are available when you use launch configurations. For example, you cannot create an Auto Scaling group that launches both Spot and On-Demand Instances or that specifies multiple instance types. You must use a launch template to configure these features. 
-{{% /notice %}}
+:::
 
-{{% notice warning %}}
+:::alert{type=warning}
 During this workshop, you use your account's default VPC to create the instances. If your account does not have a default VPC you can create or nominate one following [this link](https://docs.aws.amazon.com/vpc/latest/userguide/default-vpc.html#create-default-vpc)
-{{% /notice %}}
+:::
 
 **Environment variables definition**
 

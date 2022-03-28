@@ -16,7 +16,7 @@ Spot Blueprints gives you a jump start in using Spot architectures by providing 
 2. In the navigation pane, choose **Spot Requests**.
 3. Choose **Spot Blueprints** in the top right corner.
 
-![Spot Blueprints](/images/spot_blueprints.png)
+![Spot Blueprints](/static/images/spot_blueprints.png)
 
 You will see different categories to get you started. From there, you can either download a pre-configured blueprint in AWS CloudFormation or Terraform format, or choose to configure it.
 You can learn more about Spot Blueprints by reading the [launch blog post](https://aws.amazon.com/blogs/compute/introducing-spot-blueprints-a-template-generator-for-frameworks-like-kubernetes-and-apache-spark/). If you don’t find a blueprint that you need, feel free to provide us feedback using the [Spot Blueprints Feedback link](https://console.aws.amazon.com/ec2sp/v2/home?region=us-east-1#/spot/blueprints?show_feedback=true).

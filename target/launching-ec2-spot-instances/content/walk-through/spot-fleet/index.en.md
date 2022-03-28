@@ -10,9 +10,9 @@ Spot Fleet is an API ideal for workloads that have a start and end (example batc
 
 Spot Fleet allows you to diversify across different AZs and networks. Unlike Auto Scaling Group, Spot Fleet does not re-balance instances across AZs. Use Auto Scaling groups instead if AZ-rebalance is key for your workload. Spot Fleet supports types `maintain` and `request`. Similar to Auto Scaling groups, the `maintain` type preserves the number of instances by replacing un-healthy instances.
 
-{{% notice info %}}
+:::alert{type=info}
 To support mix instances with different types and purchasing options, Spot Fleet must use **Launch Templates**. In this exercise, you  re-use the same Launch Template that you created before.
-{{% /notice %}}
+:::
 
 #### Spot Fleet example: Using weighted mixed instances with Spot Fleet for batch workloads
 
@@ -21,16 +21,16 @@ In this part of the workshop, you work on a common scenario that uses weights an
 By default, the **Target Capacity** attribute for Spot Fleet defines the number of instances that the Spot Fleet procures. When you use Spot Fleet weights, and associate a custom weight with an instance in the override section, the total target capacity is equivalent to the total target of weights that you give to the spot. Going back to the "Compute Slots" or vCPUs analogy, you can instruct Spot Fleet to provide a number of vCPUs or "Compute Slots" from many instances with different sizes.
 
 
-{{% notice info %}}
+:::alert{type=info}
 EC2 Auto Scaling group also supports weights and priorities similar to Spot Fleet and EC2 Fleet, therefore you can consider Auto Scaling group to run this type of workload.
-{{% /notice %}}
+:::
 
 
 To start with the hands on part, you first need to create a *json* file that sets a few relevant Spot parameters; One of the parameters is `IamFleetRole`. `IamFleetRole` must be set up to point to the ARN of an IAM role that grants the Spot Fleet the permission to request, launch, terminate, and tag instances on your behalf. For this purpose, you are going to first retrieve the ARN of the Service-Linked role named `AWSServiceRoleForEC2SpotFleet`. For more information read the [spot fleet prerequisites](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/spot-fleet-requests.html#spot-fleet-prerequisites).
 
-{{% notice warning %}}
+:::alert{type=warning}
 If you have never launched a Spot Fleet, the AWSServiceRoleForEC2SpotFleet won't exist in your account. To create it run the following command in AWS CloudShell: `aws iam create-service-linked-role --aws-service-name spotfleet.amazonaws.com`
-{{% /notice %}}
+:::
 
 Execute the following command to export the ARN of the Service-Linked role to an environment variable.
 
@@ -158,9 +158,9 @@ aws ec2 describe-spot-fleet-request-history --spot-fleet-request-id=$SPOT_FLEET_
 ```
 
 
-{{% notice info %}}
+:::alert{type=info}
 There is an allocation Strategy named `capacityOptimizedPrioritized`. What would be the results if you repeat the same exercise with this allocation strategy?
-{{% /notice %}}
+:::
 
 {{% /expand %}}
 

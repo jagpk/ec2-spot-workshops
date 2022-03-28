@@ -15,7 +15,7 @@ You can check the Spot savings by going to the [Savings Summary](https://docs.aw
 2. In the navigation pane, choose **Spot Requests**.
 3. In the top right corner of the screen, select **Savings summary**
 
-![Savings summary](/images/spot-savings.png)
+![Savings summary](/static/images/spot-savings.png)
 
 ## Pricing history 
 
@@ -25,7 +25,7 @@ Pricing history helps you to understand how the Spot price changes over time, to
 2. In the navigation pane, choose **Spot Requests**.
 3. Choose **Pricing history** in the top right corner.
 
-![Pricing history](/images/spot-instance-pricing-history.png)
+![Pricing history](/static/images/spot-instance-pricing-history.png)
 
 If you are interested in how to use the Spot API programmatically, You can use the **[describe-spot-price-history](https://docs.aws.amazon.com/cli/latest/reference/ec2/describe-spot-price-history.html)** API to retrieve the information you need.
 

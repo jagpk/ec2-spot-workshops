@@ -1,0 +1,8 @@
+version: "1.0"
+languageCode: en-US
+defaultContentLanguage: en
+languages:
+  en:
+    title: Launching EC2 Spot Instances
+    weight: 1
+    languageName: English

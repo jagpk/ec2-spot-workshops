@@ -8,17 +8,17 @@ include_toc: false
 
 RunInstances API allows you to launch one or more instances, using a launch template that you have previously configured. Typically you use the RunInstances API to launch one or more instances of the same type in situations where you are not planning to replace or manage the instances as a group entity.
 
-{{% notice info %}}
+:::alert{type=info}
 Even though RunInstances API allows you to launch Spot instances, it does not allow you to specify a replacement strategy or an allocation strategy. Remember that by specifying multiple Spot capacity pools you can apply instance diversification and by using `capacity-optimized` allocation strategy, Amazon EC2 automatically launches Spot Instances from the optimal capacity pools. This is why it is recommended to use EC2 Fleet in `instant` mode as a drop-in replacement for RunInstances API.
-{{% /notice %}}
+:::
 
 ## RunInstance example: Launching a single instance
 
 The most common way to launch a one-off single instance is RunInstance. You use the launch template that you previously created. To launch a RunInstances on EC2 Spot you need to create below the configuration file:
 
-{{% notice info %}}
+:::alert{type=info}
 In this case you are adding a Tag to the newly created instance. You use this tag to terminate the instance later on.
-{{% /notice %}}
+:::
 
 
 ```
