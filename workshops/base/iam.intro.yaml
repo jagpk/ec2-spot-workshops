@@ -1,0 +1,13 @@
+title: "Intro to IAM"
+author: "Christian Kniep"
+description: "This base workshop adds an intro for IAM"
+modules:
+  intro:
+    source: ../modules/intro/chapter-plain
+    title: Introduction
+    weight: 1
+    modules:
+      iam: 
+          source: ../modules/intro/aws/iam
+          title: IAM
+          weight: 2

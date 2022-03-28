@@ -1,0 +1,73 @@
+title: "Launching EC2 Spot Instances"
+author: "Jagdeep Phoolkumar"
+domain: launching-ec2-spot-instances
+description: "This workshop gives a walk-through of APIs and AWS CLIs used to create EC2 Spot Instances"
+theme-variant: aws
+showVisitedLinks: false
+isDraft: false
+base: ../base/multi
+source: ../modules/workshops/launching-spot-instances/landing
+chapters:
+  - intro
+  - setup
+  - walk-through
+  - cleanup
+  - call-to-action
+base-workshops:
+flavors: ["self-paced"]
+default-language: "self-paced"
+modules:
+  intro:
+    source: ../modules/workshops/launching-spot-instances/intro
+    title: Introduction
+    weight: 1
+  setup:
+    source: ../modules/workshops/launching-spot-instances/setup/intro
+    title: Setup
+    weight: 2
+    modules:
+      cloudshell:
+        title: "AWS CloudShell"
+        weight: 1
+        source: ../modules/commons/cloudshell
+      launch-template:
+        title: "Creating a Launch Template"
+        weight: 2
+        source: ../modules/commons/launch-template
+  walk-through:
+    source: ../modules/workshops/launching-spot-instances/walk-through/intro
+    title: "Walk-through"
+    weight: 3
+    modules:
+      asg:
+        title: "EC2 Auto Scaling group"
+        weight: 1
+        source: ../modules/workshops/launching-spot-instances/walk-through/asg
+      ec2-fleet:
+        title: "EC2 Fleet"
+        weight: 2
+        source: ../modules/workshops/launching-spot-instances/walk-through/ec2-fleet
+      spot-fleet:
+        title: "Spot Fleet"
+        weight: 3
+        source: ../modules/workshops/launching-spot-instances/walk-through/spot-fleet
+      run-instance:
+        title: "RunInstances"
+        weight: 4
+        source: ../modules/workshops/launching-spot-instances/walk-through/run-instances
+      spot-blueprints:
+        title: "Spot Blueprints"
+        weight: 5
+        source: ../modules/commons/spot-blueprints
+      spot-dashboards:
+        title: "Spot Dashboards"
+        weight: 6
+        source: ../modules/commons/spot-dashboards
+  cleanup: 
+    source: ../modules/workshops/launching-spot-instances/cleanup
+    title: "Cleanup"
+    weight: 4
+  call-to-action: 
+    source: ../modules/workshops/launching-spot-instances/call-to-action
+    title: "Call To Action"
+    weight: 5

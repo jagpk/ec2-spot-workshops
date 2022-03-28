@@ -1,0 +1,12 @@
+title: "AWS ParallelCluster CleanUp via Cloudshell"
+author: "Christian Kniep"
+description: "This base workshop cleanup for AWS ParallelCluster via Cloudshell"
+modules:
+  cleanup:
+    source: ../modules/setup/cleanup/chapter
+    title: Cleanup
+    modules: 
+      cloud9: 
+        title: "Cloud9"
+        weight: 1
+        source: ../modules/setup/cleanup/pcluster/cloud9

@@ -1,0 +1,21 @@
+title = "Launching EC2 Spot Instances"
+languageCode = "en-us"
+baseURL = ""
+theme = ["video", "learn"]
+defaultContentLanguageInSubdir = false
+defaultContentLanguage = "self-paced"
+
+[Outputs]
+  home = ["HTML", "RSS", "JSON"]
+
+[Params]
+  author = "Jagdeep Phoolkumar"
+  description = "This workshop gives a walk-through of APIs and AWS CLIs used to create EC2 Spot Instances"
+  showVisitedLinks = false
+  themeVariant = "aws"
+
+[languages]
+  [languages.self-paced]
+    title = "Launching EC2 Spot Instances"
+    weight = 3
+    languageName = "self-paced"

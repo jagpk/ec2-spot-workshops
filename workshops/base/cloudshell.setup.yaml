@@ -1,0 +1,9 @@
+title: "Setup of AWS Cloudshell"
+author: "Christian Kniep"
+description: "This base workshop adds the setup of AWS Cloudshell"
+modules:
+  setup:
+    modules: 
+      cloudshell: 
+        title: CloudShell
+        source: ../modules/setup/cloudshell/create-cloudshell

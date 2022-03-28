@@ -1,0 +1,12 @@
+title: "Best Practise Setup of Cloud9"
+author: "Christian Kniep"
+description: "This base workshop adds into and setup for Cloud9"
+flavors: ["self-paced", "aws-led"]
+default-language: "self-paced"
+modules:
+  setup:
+    modules: 
+      cloud9: 
+        title: Finalize Cloud9
+        weight: 1
+        source: ../modules/setup/pcluster/hpc-gameday/cloud9/finalize

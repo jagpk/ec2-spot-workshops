@@ -1,0 +1,14 @@
+title: "Intro to AWS Cloudshell"
+author: "Christian Kniep"
+description: "This base workshop adds an intro for AWS Cloudshell"
+modules:
+  intro: 
+    source: ../modules/landing/chapter/intro-plain
+    title: Introduction
+    weight: 1
+    modules: 
+      cloudshell: 
+        source: ../modules/intro/aws/cloudshell
+        title: Cloudshell
+        weight: 1
+  

@@ -1,0 +1,13 @@
+title: "Intro to AWS Cloud9"
+author: "Christian Kniep"
+description: "This base workshop adds an intro for AWS Cloud9"
+modules:
+  intro: 
+    source: ../modules/landing/chapter/intro-plain
+    title: Introduction
+    modules: 
+      cloud9: 
+        source: ../modules/intro/aws/cloud9
+        title: Cloud9
+        weight: 1
+  

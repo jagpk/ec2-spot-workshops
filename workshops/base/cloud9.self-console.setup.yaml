@@ -1,0 +1,36 @@
+title: "Best Practise Setup of Cloud9"
+author: "Christian Kniep"
+description: "This base workshop adds into and setup for Cloud9"
+flavors: ["self-paced", "aws-led"]
+default-language: "self-paced"
+modules:
+  setup:
+    source: ../modules/setup/pcluster/best-practise/generic/chapter
+    title: Setup
+    weight: 2
+    modules: 
+      cloud9: 
+        title: Cloud9
+        weight: 1
+        source: ../modules/setup/cloud9/self-paced/setup  
+        modules:
+          workspace:
+            title: "Create a Workspace"
+            weight: 1
+            source: ../modules/setup/cloud9/self-paced/workspace
+          ebs:
+            title: "Resize Root Volume"
+            weight: 2
+            source: ../modules/setup/cloud9/self-paced/resize-ebs
+          create-iam:
+            title: "Create an IAM role"
+            weight: 3
+            source: ../modules/setup/cloud9/self-paced/create-iam
+          update-iam:
+            title: "Attach the IAM role"
+            weight: 4
+            source: ../modules/setup/cloud9/self-paced/update-iam
+          disable-cred:
+            title: "Disable Temporary Credentials"
+            weight: 5
+            source: ../modules/setup/cloud9/self-paced/disable-cred
