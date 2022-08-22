@@ -13,7 +13,11 @@ When adopting EC2 Spot Instances, our recommendation is to consider first Auto S
 In the past, Auto Scaling groups used Launch Configurations. Applications using Launch Configurations should migrate to Launch Templates. With Launch Templates you can provision capacity across multiple instance types using both Spot Instances and On-Demand Instances to achieve the desired scale, performance, and cost optimization.
 {{% /notice %}}
 
+
 #### Auto Scaling group example: Using mixed instance groups with Spot and On-Demand capacity
+
+I want to add a test line.
+
 
 A common case when using Auto Scaling groups, is to use it with workloads that require a mix
 of Spot and On-Deamand capacity.
