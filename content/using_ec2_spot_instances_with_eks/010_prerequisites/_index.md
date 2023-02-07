@@ -1,13 +1,14 @@
 ---
-title: "Start the workshop"
+title: "Starting the workshop"
 chapter: true
 weight: 10
 ---
 
-# Getting Started
-To start the workshop, follow one of the following depending on whether you are...
+# Starting the workshop
+{{% notice note %}}
+If you are attending an event, please run in the region suggested by the facilitators of the workshop.
+{{% /notice %}}
 
-* ...[running the workshop on your own (in your own account)]({{< ref "/using_ec2_spot_instances_with_eks/010_prerequisites/self_paced.md" >}}), or
-* ...[attending an AWS hosted event (using AWS provided hashes)]({{< ref "/using_ec2_spot_instances_with_eks/010_prerequisites/aws_event.md" >}})
+**To start the workshop,** follow one of the following pages, depending on whether you are...
 
-Once you have completed with either setup, continue with **[Create a Workspace]({{< ref "/using_ec2_spot_instances_with_eks/010_prerequisites/workspace.md" >}})**
+{{% children  %}}

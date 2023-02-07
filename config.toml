@@ -5,6 +5,7 @@ theme = "learn"
 uglyurls = true
 sectionPagesMenu = "main"
 pygmentsCodeFences = true
+enableEmoji = true
 
 [blackfriday]
 hrefTargetBlank = true

@@ -63,9 +63,6 @@ you will notice additional Cloudformation stacks were also deployed which is the
 
 - Click on the url against `Cloud9IDE` from the outputs
 
-{{% insert-md-from-file file="using_ec2_spot_instances_with_eks/010_prerequisites/workspace_at_launch.md" %}}
-
-{{% insert-md-from-file file="using_ec2_spot_instances_with_eks/010_prerequisites/update_workspace_settings.md" %}}
 
 ### Validate the IAM role {#validate_iam}
 
@@ -75,12 +72,6 @@ Use the [GetCallerIdentity](https://docs.aws.amazon.com/cli/latest/reference/sts
 aws sts get-caller-identity
 
 ```
-
-{{% insert-md-from-file file="using_ec2_spot_instances_with_eks/010_prerequisites/at_an_aws_validaterole.md" %}}
-
-{{% notice note %}}
-Since we have already setup the prerequisites, **you can head straight to [Test the Cluster]({{<  relref "/using_ec2_spot_instances_with_eks/020_eksctl/test.md"  >}})**
-{{% /notice %}}
 
 {{% /expand%}}
 
