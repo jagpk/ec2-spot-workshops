@@ -89,7 +89,7 @@ managedNodeGroups:
 metadata:
   name: eksworkshop-eksctl
   region: ${AWS_REGION}
-  version: "1.21"
+  version: "1.24"
 
 EOF
 ```
@@ -111,12 +111,12 @@ There are a few things to note in the configuration that we just used to create 
  * We applied a **[Taint](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/)** `spotInstance: "true:PreferNoSchedule"`. **PreferNoSchedule** is used to indicate we prefer pods not be scheduled on Spot Instances. This is a “preference” or “soft” version of **NoSchedule** – the system will try to avoid placing a pod that does not tolerate the taint on the node, but it is not required.
  * Notice that the we added 3 node labels per node:
 
-  * **alpha.eksctl.io/cluster-name**, to indicate the nodes belong to **eksworkshop-eksctl** cluster.
-  * **alpha.eksctl.io/nodegroup-name**, to indicate the nodes belong to **mng-spot-4vcpu-16gb** or **mng-spot-8vcpu-32gb** node groups.
-  * **intent**, to allow you to deploy stateless applications on nodes that have been labeled with value **apps**
+    * **alpha.eksctl.io/cluster-name**, to indicate the nodes belong to **eksworkshop-eksctl** cluster.
+    * **alpha.eksctl.io/nodegroup-name**, to indicate the nodes belong to **mng-spot-4vcpu-16gb** or **mng-spot-8vcpu-32gb** node groups.
+    * **intent**, to allow you to deploy stateless applications on nodes that have been labeled with value **apps**
 
  * Notice that the we added 2 cluster autoscaler related tags to node groups:  
-  * **k8s.io/cluster-autoscaler/node-template/label/intent** and **k8s.io/cluster-autoscaler/node-template/taint** are used by cluster autoscaler when node groups scale down to 0 (and scale up from 0). Cluster autoscaler acts on Auto Scaling groups belonging to node groups, therefore it requires same tags on ASG as well. Currently managed node groups do not auto propagate tags to ASG, see this [open issue](https://github.com/aws/containers-roadmap/issues/1524). Therefore, we will be adding these tags to ASG manually. 
+    * **k8s.io/cluster-autoscaler/node-template/label/intent** and **k8s.io/cluster-autoscaler/node-template/taint** are used by cluster autoscaler when node groups scale down to 0 (and scale up from 0). Cluster autoscaler acts on Auto Scaling groups belonging to node groups, therefore it requires same tags on ASG as well. Currently managed node groups do not auto propagate tags to ASG, see this [open issue](https://github.com/aws/containers-roadmap/issues/1524). Therefore, we will be adding these tags to ASG manually. 
 
 {{% notice note %}}
 Since eksctl 0.41, integrates with the instance selector ! This can create more convenient configurations that apply diversification of instances in a concise way.

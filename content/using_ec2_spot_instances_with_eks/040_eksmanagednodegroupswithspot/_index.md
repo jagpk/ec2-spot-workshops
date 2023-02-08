@@ -1,11 +1,11 @@
 ---
-title: "Add EKS managed Spot workers"
+title: "Adding Spot Capacity"
 chapter: true
 weight: 40
 draft: false
 ---
 
-# Add EKS managed Spot workers
+# Adding Spot Capacity
 
 In this module, you will learn how to provision, manage, and maintain your Kubernetes clusters with Amazon EKS managed node groups with Spot capacity to optimize cost and scale.
 

@@ -6,12 +6,21 @@ weight: 40
 pre: "<b>4. </b>"
 ---
 
-In this workshop, you will learn how to provision, manage, and maintain your Kubernetes 
-clusters with Amazon Elastic Kubernetes Service (Amazon EKS) at any scale on Spot Instances to architect for optimizations on cost and scale. 
-We will dive deep using hands-on material to provision worker nodes using Amazon EKS managed node groups, scale the worker nodes, understand interruption handling, and design for fault tolerance.
+### Overview
+In this workshop, you learn how to provision, manage, and maintain your Kubernetes clusters with Amazon Elastic Kubernetes Service (Amazon EKS) at any scale on Spot Instances to architect for optimizations on cost and scale. You dive deep using hands-on material to provision worker nodes using Amazon EKS managed node groups, scale the worker nodes, understand interruption handling, and design for fault tolerance.
 
-This workshop is originally based on AWS [EKS Workshop](https://eksworkshop.com/). You can find 
-there more modules and learn about other Amazon Elastic Kubernetes Service best practices.
+### Prerequisites
+This is **L400** workshop that requires readers of this workshop to have basic knowledge of **Kubernetes** and **Amazon EKS**. If you are not familiar with these concepts then go through below introductory chapters before starting the workshop:
 
-![EKS](images/using_ec2_spot_instances_with_eks/3-service-animated.gif)
+:pushpin: [Basics of Kubernetes](https://www.eksworkshop.com/010_introduction/basics/)
 
+:pushpin: [Kubernetes Architecture](https://www.eksworkshop.com/010_introduction/architecture/)
+
+:pushpin: [Basics of Amazon EKS](https://www.eksworkshop.com/010_introduction/eks/)
+
+
+### Estimated time to run this workshop
+The estimated time for completing the workshop is **90 to 120 minutes**.
+
+### Estimated cost to run this workshop
+The estimated cost for completing the workshop is less than **$5 USD**.

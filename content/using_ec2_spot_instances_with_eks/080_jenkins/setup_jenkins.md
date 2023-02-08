@@ -18,7 +18,7 @@ You can then run helm search repo to see the charts.
 helm search repo jenkins
 ```
 
-Let's create the values.yaml to declare the configuration of our Jenkins installation. We will use nodeSelector (`intent: control-apps, eks.amazonaws.com/capacityType: ON_DEMAND`) to deploy jenkins-controller on On-Demand nodes and nodeSelector (`intent: jenkins-agents, eks.amazonaws.com/capacityType: SPOT`) to deploy Spot nodes. 
+Let's create the values.yaml to declare the configuration of our Jenkins installation. We will use nodeSelector (`intent: control-apps, eks.amazonaws.com/capacityType: ON_DEMAND`) to deploy jenkins-controller on On-Demand nodes and nodeSelector (`intent: jenkins-agents, eks.amazonaws.com/capacityType: SPOT`) to deploy Spot nodes. Refer this link to refer all available option in [values.yaml](https://github.com/jenkinsci/helm-charts/blob/main/charts/jenkins/values.yaml)
 
 ```
 cat << EOF > values.yaml
@@ -26,7 +26,7 @@ cat << EOF > values.yaml
 controller:
   componentName: "jenkins-controller"
   image: "jenkins/jenkins"
-  tag: "2.303.2-lts-jdk11"
+  tag: "2.375.2-lts-jdk11"
   resources:
     requests:
       cpu: "1024m"

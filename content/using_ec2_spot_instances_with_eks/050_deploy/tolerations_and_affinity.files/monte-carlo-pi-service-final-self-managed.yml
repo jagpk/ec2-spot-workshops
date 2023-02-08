@@ -51,7 +51,7 @@ spec:
                 - apps 
       containers: 
         - name: monte-carlo-pi-service 
-          image: ruecarlo/monte-carlo-pi-service
+          image: ${MONTE_CARLO_IMAGE}
           resources: 
             requests: 
               memory: "512Mi" 

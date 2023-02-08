@@ -30,12 +30,12 @@ Our goal in this workshop, is to create 2 diversified node groups that adhere th
 We will use **[amazon-ec2-instance-selector](https://github.com/aws/amazon-ec2-instance-selector)** to help us select the relevant instance
 types and families with sufficient number of vCPUs and RAM. 
 
-There are over 350 different instance types available on EC2 which can make the process of selecting appropriate instance types difficult. amazon-ec2-instance-selector helps you select compatible instance types for your application to run on. The command line interface can be passed resource criteria like vcpus, memory, network performance, and much more and then return the available, matching instance types.
+There are over 500 different instance types available on EC2 which can make the process of selecting appropriate instance types difficult. amazon-ec2-instance-selector helps you select compatible instance types for your application to run on. The command line interface can be passed resource criteria like vcpus, memory, network performance, and much more and then return the available, matching instance types.
 
 Let's first install **amazon-ec2-instance-selector** :
 
 ```
-curl -Lo ec2-instance-selector https://github.com/aws/amazon-ec2-instance-selector/releases/download/v2.0.3/ec2-instance-selector-`uname | tr '[:upper:]' '[:lower:]'`-amd64 && chmod +x ec2-instance-selector
+curl -Lo ec2-instance-selector https://github.com/aws/amazon-ec2-instance-selector/releases/download/v2.4.1/ec2-instance-selector-`uname | tr '[:upper:]' '[:lower:]'`-amd64 && chmod +x ec2-instance-selector
 sudo mv ec2-instance-selector /usr/local/bin/
 ec2-instance-selector --version
 ```
@@ -47,7 +47,7 @@ we need to first get a group of instances that meet the 4 vCPUs and 16 GB of RAM
 Run the following command to get the list of instances.
 
 {{% notice note %}}
-The results might differ if you created Cloud9 in any other region than the five regions (N. Virginia, Oregon, Ireland, Ohio and Singapore) suggested in [Create a Workspace]({{< relref "/using_ec2_spot_instances_with_eks/010_prerequisites/workspace" >}}) chapter. We will use **`--deny-list`** for filtering out the instances that are not supported across these five regions. 
+We use **`--deny-list`** for filtering out the instances that are not supported across various regions. 
 {{% /notice %}}
 
 ```
@@ -75,7 +75,7 @@ Internally ec2-instance-selector is making calls to the [DescribeInstanceTypes](
  * of x86_64 Architecture (no ARM instances like A1 or m6g instances for example)
  * Instances that have 4 vCPUs and 16 GB of RAM
  * Instances of current generation (4th gen onwards)
- * Instances that don’t meet the regular expression .*[in].*, so effectively latest generation Intel instances and improved network throughput instances. The main reason to discard those in this workshop is that some of those might not be available (at the time of writing this workshop) on all the regions. You can check the availability using instance selector and add them yourselve as an exercise.
+ * Instances that don’t meet the regular expression .*[in].*, so effectively latest generation Intel instances and improved network throughput instances. The main reason to discard those in this workshop is that some of those might not be available (at the time of writing this workshop) on all the regions. You can check the availability using instance selector and add them yourself as an exercise.
 
 {{% notice warning %}}
 Your workload may have other constraints that you should consider when selecting instance types. For example. **t2** and **t3** instance types are [burstable instances](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/burstable-performance-instances.html) and might not be appropriate for CPU bound workloads that require CPU execution determinism. Instances such as m5**a** are [AMD Instances](https://aws.amazon.com/ec2/amd/), if your workload is sensitive to numerical differences (i.e: financial risk calculations, industrial simulations) mixing these instance types might not be appropriate.

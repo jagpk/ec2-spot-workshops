@@ -1,7 +1,7 @@
 ---
 title: "Tolerations and Affinity"
 date: 2018-08-07T08:30:11-07:00
-weight: 20
+weight: 30
 ---
 
 ## Add Tolerations
@@ -123,7 +123,7 @@ spec:
                 - apps 
       containers: 
         - name: monte-carlo-pi-service 
-          image: ruecarlo/monte-carlo-pi-service
+          image: ${MONTE_CARLO_IMAGE}
           resources: 
             requests: 
               memory: "512Mi" 

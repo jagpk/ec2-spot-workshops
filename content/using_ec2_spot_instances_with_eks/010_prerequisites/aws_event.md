@@ -7,9 +7,7 @@ weight: 20
 ### Running the workshop at an AWS Event
 
 {{% notice warning %}}
-Only complete this section if you are at an AWS hosted event (such as re:Invent,
-Kubecon, Immersion Day, or any other event hosted by an AWS employee). If you 
-are running the workshop on your own, go to: [Start the workshop on your own]({{< ref "/using_ec2_spot_instances_with_eks/010_prerequisites/self_paced.md" >}}).
+Only complete this section if you are at an AWS hosted event (such as re:Invent,Kubecon, Immersion Day, or any other event hosted by an AWS employee). If you are running the workshop on your own, go to: [Start the workshop on your own]({{< ref "/using_ec2_spot_instances_with_eks/010_prerequisites/self_paced.md" >}}).
 {{% /notice %}}
 
 ### Login to the AWS Workshop Portal
@@ -56,16 +54,13 @@ In this workshop, you'll need to reference the resources created by the CloudFor
 It is recommended that you keep this window open so you can easily refer to the outputs and resources throughout the workshop.
 
 {{% notice info %}}
-you will notice additional Cloudformation stacks were also deployed which is the result of the stack that starts with **mod-**. One to deploy the Cloud9 Workspace and two other to create the EKS cluster and managed nodegroup.
+you will notice additional Cloudformation stacks were also deployed which is the result of the stack that starts with **mod-**. One to deploy the Cloud9 Workspace and two other to create the EKS cluster and managed node group.
 {{% /notice %}}
 
 #### Launch your Cloud9 workspace
 
 - Click on the url against `Cloud9IDE` from the outputs
 
-{{% insert-md-from-file file="using_ec2_spot_instances_with_eks/010_prerequisites/workspace_at_launch.md" %}}
-
-{{% insert-md-from-file file="using_ec2_spot_instances_with_eks/010_prerequisites/update_workspace_settings.md" %}}
 
 ### Validate the IAM role {#validate_iam}
 
@@ -76,11 +71,4 @@ aws sts get-caller-identity
 
 ```
 
-{{% insert-md-from-file file="using_ec2_spot_instances_with_eks/010_prerequisites/at_an_aws_validaterole.md" %}}
-
-{{% notice note %}}
-Since we have already setup the prerequisites, **you can head straight to [Test the Cluster]({{<  relref "/using_ec2_spot_instances_with_eks/020_eksctl/test.md"  >}})**
-{{% /notice %}}
-
 {{% /expand%}}
-

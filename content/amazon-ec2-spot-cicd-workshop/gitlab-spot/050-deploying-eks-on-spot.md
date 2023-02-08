@@ -97,7 +97,3 @@ You are now ready for the final steps to deploy your demo application into the c
 ### Challenge
 
 Instead of using Terraform try deploying the Amazon EKS cluster with eksctl.
-
-{{% notice tip %}}
-You can find step-by-step instructions in the [**Containers with EKS**](/using_ec2_spot_instances_with_eks/020_eksctl.html) workshop, but make sure you modify them to use the VPC you created in this workshop.
-{{% /notice %}}

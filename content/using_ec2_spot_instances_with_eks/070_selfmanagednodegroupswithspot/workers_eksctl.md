@@ -9,8 +9,6 @@ draft: false
 If you are starting with **self managed Spot workers** chapter directly and planning to run only self managed node groups with Spot Instances, then first complete below chapters and then return back here:<br>
 <br>
 [Start the workshop]({{< relref "/using_ec2_spot_instances_with_eks/010_prerequisites" >}})<br>
-[Launch using eksctl]({{< relref "/using_ec2_spot_instances_with_eks/020_eksctl" >}})<br>
-[Install Kubernetes Tools]({{< relref "/using_ec2_spot_instances_with_eks/030_k8s_tools" >}})<br>
 [Select Instance Types for Diversification]({{< relref "/using_ec2_spot_instances_with_eks/040_eksmanagednodegroupswithspot/selecting_instance_types.md" >}})
 
 {{% /notice %}}
@@ -42,7 +40,7 @@ nodeGroups:
         instanceTypes: ["m4.xlarge", "m5.xlarge", "m5a.xlarge", "m5ad.xlarge", "m5d.xlarge", "t2.xlarge", "t3.xlarge", "t3a.xlarge"] 
         onDemandBaseCapacity: 0
         onDemandPercentageAboveBaseCapacity: 0
-        spotAllocationStrategy: capacity-optimized
+        spotAllocationStrategy: price-capacity-optimized
       labels:
         eks.amazonaws.com/capacityType: SPOT
         intent: apps
@@ -67,7 +65,7 @@ nodeGroups:
         instanceTypes: ["m4.2xlarge", "m5.2xlarge", "m5a.2xlarge", "m5ad.2xlarge", "m5d.2xlarge", "t2.2xlarge", "t3.2xlarge", "t3a.2xlarge"] 
         onDemandBaseCapacity: 0
         onDemandPercentageAboveBaseCapacity: 0
-        spotAllocationStrategy: capacity-optimized
+        spotAllocationStrategy: price-capacity-optimized
       labels:
         eks.amazonaws.com/capacityType: SPOT
         intent: apps
@@ -102,7 +100,7 @@ There are a few things to note in the configuration that we just used to create 
  * First node group has **xlarge** (4 vCPU and 16 GB) instance types with **minSize** 0, **maxSize** 4 and **desiredCapacity** 2.
  * Second node group has **2xlarge** (8 vCPU and 32 GB) instance types with **minSize** 0, **maxSize** 2 and **desiredCapacity** 1.
  * **onDemandBaseCapacity** and **onDemandPercentageAboveBaseCapacity** both set to **0**. which implies all nodes in the node group would be **Spot instances**.
- * **spotAllocationStrategy** is set as **[Capacity Optimized](https://aws.amazon.com/about-aws/whats-new/2019/08/new-capacity-optimized-allocation-strategy-for-provisioning-amazon-ec2-spot-instances/)**. This will ensure the capacity we provision in our node groups is procured from the pools that will have less chances of being interrupted.
+ * **spotAllocationStrategy** is set as **[price-capacity-optimized](https://aws.amazon.com/blogs/compute/introducing-price-capacity-optimized-allocation-strategy-for-ec2-spot-instances/)**. This will ensure the capacity we provision in our node groups is procured from the pools that have low prices and less chances of being interrupted.
  * We applied a **[Taint](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/)** `spotInstance: "true:PreferNoSchedule"`. **PreferNoSchedule** is used to indicate we prefer pods not be scheduled on Spot Instances. This is a “preference” or “soft” version of **NoSchedule** – the system will try to avoid placing a pod that does not tolerate the taint on the node, but it is not required.
  * Notice that the we added 3 node labels per node:
   * **eks.amazonaws.com/capacityType: SPOT**, to  identify Spot nodes and use as [affinities](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/).

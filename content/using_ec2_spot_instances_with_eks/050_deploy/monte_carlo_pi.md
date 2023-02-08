@@ -1,7 +1,7 @@
 ---
 title: "Monte Carlo Pi Template"
 date: 2018-08-07T08:30:11-07:00
-weight: 10
+weight: 20
 ---
 
 ## Monte Carlo Pi Template
@@ -41,7 +41,7 @@ spec:
     spec: 
       containers: 
         - name: monte-carlo-pi-service 
-          image: ruecarlo/monte-carlo-pi-service
+          image: ${MONTE_CARLO_IMAGE}
           resources: 
             requests: 
               memory: "512Mi" 

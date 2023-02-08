@@ -30,7 +30,7 @@ This operation may take 3-5 minutes to complete.
 
 ## Removing the cluster
 ```
-eksctl delete cluster -f eksworkshop.yaml
+eksctl delete cluster -f eksworkshop-eksctl
 ```
 
 ## Delete SSH Key Pair and Cloud 9
