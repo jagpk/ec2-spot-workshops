@@ -22,7 +22,7 @@ You start the workshop with an EKS cluster and a managed node group with On-Dema
 
 1. Go into the CloudFormation console and select the creation of a new stack. Select **Template is ready**, and then **Upload a template file**, then select the file that you downloaded to your computer and click on **Next**.
 
-1. Fill in the **Stack Name** using 'eks-ng-workshop', leave all the settings in the parameters section as default and click **Next**.
+1. Fill in the **Stack Name** using `eks-ng-workshop`, leave all the settings in the parameters section as default and click **Next**.
 
 1. In the Configure Stack options just scroll to the bottom of the page and click **Next**.
 
