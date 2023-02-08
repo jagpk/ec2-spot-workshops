@@ -13,14 +13,6 @@ Parameters:
       - t3.small
       - t3.medium
     ConstraintDescription: Must be a valid Cloud9 instance type
-  WorkshopC9EnvType: 
-    Description: Environment type.
-    Default: 3rdParty
-    Type: String
-    AllowedValues: 
-      - self
-      - 3rdParty
-    ConstraintDescription: must specify self or 3rdParty.
   WorkshopC9InstanceVolumeSize: 
     Type: Number
     Description: The Size in GB of the Cloud9 Instance Volume. 
@@ -29,14 +21,34 @@ Parameters:
     Description: The type of instance to connect to the environment
     Type: String
     Default: t3.medium
+  KubeCtlVersion:
+    Description: Cloud9 instance kubectl version
+    Type: String
+    Default: "v1.24.9"
+  EKSCtlVersion:
+    Description: Cloud9 instance eksctl version
+    Type: String
+    Default: "v0.128.0"
   KubernetesVersion:
     Description: Kubernetes version
     Type: String
-    Default: "1.22"
-  KarpenterVersion:
-    Description: Karpenter version
+    Default: "1.24"
+  HelmVersion:
+    Description: Helm version
     Type: String
-    Default: "v0.22.1"
+    Default: "v3.9.2"
+  MetricServerVersion:
+    Description: Metric Server version
+    Type: String
+    Default: "3.8.2"
+  ALBControllerVersion:
+    Description: ALB Controller version
+    Type: String
+    Default: "1.4.7"
+  KubeCostVersion:
+    Description: Kube Cost version
+    Type: String
+    Default: "1.99.0"
   EKSClusterName:
     Description: Name of EKS Cluster
     Type: String
@@ -314,8 +326,8 @@ Resources:
               export ACCOUNTID=${AWS::AccountId}
               export REGION=${AWS::Region}
               export EKS_CLUSTER_NAME=${EKSClusterName}
-              export ASSETS_BUCKET_NAME=${AssetsBucketName}
-              export ASSETS_BUCKET_PREFIX=${AssetsBucketPrefix}
+              export EKSCTL_VERSION=${EKSCtlVersion}
+              export KUBECTL_VERSION=${KubeCtlVersion}
               INSTANCEID=$(curl http://169.254.169.254/latest/meta-data/instance-id)
               echo "Retrieved instance $INSTANCEID"
               VOLUMEID=$(aws ec2 describe-instances \
@@ -363,7 +375,8 @@ Resources:
               echo '=== CONFIGURE awscli and setting ENVIRONMENT VARS ==='
               echo "complete -C '/usr/local/bin/aws_completer' aws" >> /home/ec2-user/.bashrc.d/aws.bash
               echo '=== Run init script ==='
-              aws s3 cp s3://${AssetsBucketName}/${AssetsBucketPrefix}cloud9-init.sh /tmp && bash /tmp/cloud9-init.sh
+              curl --silent --location -o /tmp/cloud9-init.sh "https://raw.githubusercontent.com/jagpk/ec2-spot-workshops/eks-1.24/content/using_ec2_spot_instances_with_eks/010_prerequisites/prerequisites.files/cloud9-init.sh"              
+              bash /tmp/cloud9-init.sh
               echo '=== CLEANING /home/ec2-user ==='
               for f in cloud9; do rm -rf /home/ec2-user/$f; done
               chown -R ec2-user:ec2-user /home/ec2-user/
@@ -434,22 +447,6 @@ Resources:
       Roles:
         - !Ref EKSWorkshopRole
 
-  KMSSecretsKey:
-    Type: AWS::KMS::Key
-    Properties:
-      Description: "key for EKS secrets encryption"
-      Enabled: true
-      KeyPolicy:
-         Version: '2012-10-17'
-         Id: key-default-1
-         Statement:
-         - Sid: Enable IAM User Permissions
-           Effect: Allow
-           Principal:
-             AWS: !Sub arn:aws:iam::${AWS::AccountId}:root
-           Action: kms:*
-           Resource: '*'
-
   BuildProject:
     Type: AWS::CodeBuild::Project
     Properties:
@@ -485,28 +482,26 @@ Resources:
                   - |
                     yum install -y gettext
 
-                    aws s3 cp s3://${AssetsBucketName}/${AssetsBucketPrefix}eksctl-cluster.yml /tmp/eksctl-cluster.yml
+                    curl --silent --location -o /tmp/eksworkshop.yaml "https://raw.githubusercontent.com/jagpk/ec2-spot-workshops/eks-1.24/content/using_ec2_spot_instances_with_eks/010_prerequisites/prerequisites.files/eksworkshop.yaml"
 
-                    AWS_REGION=${AWS::Region} envsubst < /tmp/eksctl-cluster.yml > /tmp/eksctl-cluster-actual.yml
+                    AWS_REGION=${AWS::Region} envsubst < /tmp/eksworkshop.yaml > /tmp/eksctl-cluster-actual.yaml
 
-                    curl --silent --location "https://get.helm.sh/helm-v3.9.2-linux-amd64.tar.gz" | tar xz -C /tmp
-                    mv /tmp/linux-amd64/helm /usr/local/bin
-                    chmod +x /usr/local/bin/helm
               build:
                 commands:
                   - |
-                    eksctl create cluster -f /tmp/eksctl-cluster-actual.yml
+                    eksctl create cluster -f /tmp/eksctl-cluster-actual.yaml
                     eksctl create iamidentitymapping --cluster $EKS_CLUSTER_NAME --region=${AWS::Region} --arn arn:aws:iam::${AWS::AccountId}:role/WSParticipantRole --group system:masters --username admin
                     eksctl create iamidentitymapping --cluster $EKS_CLUSTER_NAME --region=${AWS::Region} --arn ${WorkshopC9Role.Arn} --group system:masters --username cloud9
 
                     aws eks update-kubeconfig --name $EKS_CLUSTER_NAME
 
-                    export ASSETS_BUCKET_NAME=${AssetsBucketName}
-                    export ASSETS_BUCKET_PREFIX=${AssetsBucketPrefix}
+                    export HELM_VERSION=${HelmVersion}
+                    export METRIC_SERVER_VERSION=${MetricServerVersion}
                     export AWS_ACCOUNT_ID=${AWS::AccountId}
-                    export KARPENTER_VERSION=${KarpenterVersion}
-
-                    aws s3 cp s3://${AssetsBucketName}/${AssetsBucketPrefix}codebuild-init.sh /tmp && bash /tmp/codebuild-init.sh
+                    export ALB_VERSION=${ALBControllerVersion}
+                    export KUBECOST_VERSION=${KubeCostVersion}
+                    curl --silent --location -o /tmp/codebuild-init.sh "curl --silent --location -o /tmp/cloud9-init.sh "https://raw.githubusercontent.com/jagpk/ec2-spot-workshops/eks-1.24/content/using_ec2_spot_instances_with_eks/010_prerequisites/prerequisites.files/codebuild-init.sh""
+                    bash /tmp/codebuild-init.sh
               post_build:
                 commands:
                   # CODEBUILD_BUILD_SUCCEEDING = 1 Set to 0 if the build is failing, or 1 if the build is succeeding.
@@ -520,42 +515,6 @@ Resources:
                         curl -X PUT -H 'Content-Type:' --data-binary '{"Status" : "FAILURE","Reason" : "Creation Failed", "UniqueId" : "$CODEBUILD_BUILD_ID","Data" : "See Codebuild logs for details. $CODEBUILD_LOG_PATH"}' $CFN_RESPONSE_URL
                       fi
                     fi
-      TimeoutInMinutes: 60
-
-  DestroyProject:
-    Type: AWS::CodeBuild::Project
-    Properties:
-      Name: !Sub CodeBuild-${AWS::StackName}-Destroy
-      ServiceRole: !GetAtt EKSWorkshopRole.Arn
-      Artifacts:
-        Type: NO_ARTIFACTS
-      LogsConfig:
-        CloudWatchLogs:
-          Status:  ENABLED
-      Environment:
-        Type: LINUX_CONTAINER
-        ComputeType: BUILD_GENERAL1_SMALL
-        Image: aws/codebuild/amazonlinux2-x86_64-standard:4.0
-
-      Source:
-        Type: NO_SOURCE
-        BuildSpec:
-          !Sub |
-            version: 0.2
-            phases:
-              pre_build:
-                commands:
-                  - |
-                    curl --silent --location "https://get.helm.sh/helm-v3.9.2-linux-amd64.tar.gz" | tar xz -C /tmp
-                    mv /tmp/linux-amd64/helm /usr/local/bin
-                    chmod +x /usr/local/bin/helm
-              build:
-                commands:
-                  - |
-                    aws eks update-kubeconfig --name ${EKSClusterName}
-                    aws s3 cp s3://${AssetsBucketName}/${AssetsBucketPrefix}codebuild-destroy.sh /tmp && bash /tmp/codebuild-destroy.sh
-                    sleep 30
-                    eksctl delete cluster --name ${EKSClusterName} --wait --disable-nodegroup-eviction --parallel 5
       TimeoutInMinutes: 60
 
   WaitForStackCreationHandle:
