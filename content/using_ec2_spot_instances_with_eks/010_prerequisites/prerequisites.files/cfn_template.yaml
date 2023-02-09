@@ -1,6 +1,6 @@
 ---
 AWSTemplateFormatVersion: '2010-09-09'
-Description: AWS CloudFormation template for infrastructure for the EKS Finhack workshop
+Description: AWS CloudFormation template for infrastructure for the EKS Spot workshop
   bootstraps the instance.
 Parameters:
   WorkshopC9InstanceType:
@@ -52,7 +52,7 @@ Parameters:
   EKSClusterName:
     Description: Name of EKS Cluster
     Type: String
-    Default: eksworkshop-eksctl
+    Default: eksworkshop
   ParticipantRoleArn:
     Description: Workshop Studio participant role ARN
     Type: String
@@ -225,12 +225,6 @@ Resources:
                           aws_access_key_id=creds['AccessKeyId'],
                           aws_secret_access_key=creds['SecretAccessKey'],
                           aws_session_token=creds['SessionToken']
-                      )
-
-                      cloud9.create_environment_membership(
-                          environmentId=environmentId,
-                          permissions='read-write',
-                          userArn='arn:aws:sts::${AWS::AccountId}:assumed-role/WSParticipantRole/Participant',
                       )
 
                       cloud9.update_environment(
@@ -464,8 +458,6 @@ Resources:
         EnvironmentVariables:
           - Name: CFN_RESPONSE_URL
             Value: !Ref WaitForStackCreationHandle
-          - Name: KMS_ARN
-            Value: !GetAtt KMSSecretsKey.Arn
           - Name: EKS_CLUSTER_NAME
             Value: !Ref EKSClusterName
           - Name: KUBERNETES_VERSION
@@ -490,7 +482,6 @@ Resources:
                 commands:
                   - |
                     eksctl create cluster -f /tmp/eksctl-cluster-actual.yaml
-                    eksctl create iamidentitymapping --cluster $EKS_CLUSTER_NAME --region=${AWS::Region} --arn arn:aws:iam::${AWS::AccountId}:role/WSParticipantRole --group system:masters --username admin
                     eksctl create iamidentitymapping --cluster $EKS_CLUSTER_NAME --region=${AWS::Region} --arn ${WorkshopC9Role.Arn} --group system:masters --username cloud9
 
                     aws eks update-kubeconfig --name $EKS_CLUSTER_NAME
@@ -568,7 +559,7 @@ Resources:
       Description: function to retrieve User info
       Handler: index.handler
       Role: !GetAtt TriggerBuildLambdaIamRole.Arn
-      Runtime: python3.7
+      Runtime: python3.9      
       Code:
         ZipFile: |
           import boto3
