@@ -214,6 +214,12 @@ Resources:
                       responseData = {'Error': str(e)}
                       cfnresponse.send(event, context, cfnresponse.FAILED, responseData, 'CustomResourcePhysicalID')
 
+  TerraformBackendBucket:
+    Type: AWS::S3::Bucket
+    DeletionPolicy: Delete
+    Properties: 
+      BucketName: !Join [ "-", ["terraform-backend", Ref: "AWS::AccountId"]] 
+
   AthenaResultsBucket:
     Type: AWS::S3::Bucket
     DeletionPolicy: Delete
@@ -229,42 +235,6 @@ Resources:
         PublishCloudWatchMetricsEnabled: true
         ResultConfiguration:
           OutputLocation: !Join [ "", ["s3://" , Ref: AthenaResultsBucket, "/"]]
-
-  SparkResultsTable:
-    Type: AWS::Athena::NamedQuery
-    Properties:
-      Database: "default"
-      Description: "Create table EMRWorkshopResults"
-      Name: "EMRWorkshopResults"
-      WorkGroup: !Ref SparkResultsWorkGroup
-      QueryString: !Sub |
-                    CREATE EXTERNAL TABLE EMRWorkshopResults (
-                    words string, 
-                    count bigint)
-                    stored as parquet
-                    LOCATION
-                    's3://${SparkAppBucket}/results';
-  
-  SparkResultsSpotTable:
-    Type: AWS::Athena::NamedQuery
-    Properties:
-      Database: "default"
-      Description: "Create table EMRWorkshopResultsSpot"
-      Name: "EMRWorkshopResultsSpot"
-      WorkGroup: !Ref SparkResultsWorkGroup
-      QueryString: !Sub |
-                    CREATE EXTERNAL TABLE EMRWorkshopResultsSpot (
-                    words string, 
-                    count bigint)
-                    stored as parquet
-                    LOCATION
-                    's3://${SparkAppBucket}/resultsspot';
-  
-  SparkAppBucket:
-    Type: AWS::S3::Bucket
-    DeletionPolicy: Delete
-    Properties: 
-      BucketName: !Join [ "-", ["spark-app", Ref: "AWS::AccountId"]] 
 
 ################## SSM BOOTSRAP HANDLER ###############
   C9OutputBucket:
@@ -292,8 +262,10 @@ Resources:
             - . /home/ec2-user/.bashrc
             - whoami
             - sudo -H -u ec2-user aws sts get-caller-identity
+
             - echo '=== Install JQ and envsubst ==='
             - sudo yum -y install jq gettext
+
             - echo '=== Update to the latest AWS CLI ==='
             - sudo -H -u ec2-user aws --version
             - curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
@@ -301,26 +273,33 @@ Resources:
             - sudo ./aws/install
             - . /home/ec2-user/.bash_profile
             - sudo -H -u ec2-user aws --version
+
             - echo '=== setup AWS configs ==='
             - rm -vf /home/ec2-user/.aws/credentials
             - export ACCOUNT_ID=$(aws sts get-caller-identity --output text --query Account)
             - export AWS_REGION=$(curl -s 169.254.169.254/latest/dynamic/instance-identity/document | jq -r '.region')
             - echo "export ACCOUNT_ID=${ACCOUNT_ID}" >> /home/ec2-user/.bash_profile
             - echo "export AWS_REGION=${AWS_REGION}" >> /home/ec2-user/.bash_profile
-            - !Sub echo "export S3_BUCKET=${SparkAppBucket}" >> /home/ec2-user/.bash_profile
             - sudo -H -u ec2-user aws configure set default.region ${AWS_REGION}
             - sudo -H -u ec2-user aws configure get default.region
             - sudo -H -u ec2-user aws sts get-caller-identity
-            - echo '=== Generate SSH key and import to aws ==='
-            - sudo -H -u ec2-user aws ec2 create-key-pair --key-name emr-workshop-key-pair --query "KeyMaterial" --output text > /home/ec2-user/environment/emr-workshop-key-pair.pem
-            - sudo -H -u ec2-user chmod 400 /home/ec2-user/environment/emr-workshop-key-pair.pem
-            - echo '=== Upload Spark App to S3 ==='
-            - curl "https://ec2spotworkshops.com/running_spark_apps_with_emr_on_spot_instances/launching_emr_cluster-1.files/script.py" -o "script.py"
-            - !Sub sudo -H -u ec2-user aws s3 cp script.py s3://${SparkAppBucket}
-            - . /home/ec2-user/.bash_profile
-            - echo '=== Copy Terraform files to Cloud9 ==='            
-            - curl "https://github.com/jagpk/ec2-spot-workshops/blob/emr-tf/workshops/running_spark_apps_with_emr_on_spot_instances/terraform-long-running.zip" -o "terraform-long-running.tar.gz"
 
+            - echo '=== Install Terraform ==='
+            - sudo yum install -y yum-utils
+            - sudo yum-config-manager --add-repo https://rpm.releases.hashicorp.com/AmazonLinux/hashicorp.repo
+            - sudo yum -y install terraform
+
+            - echo '=== Copy Terraform files to Cloud9 ==='
+            - sudo -H -u ec2-user curl --silent --location -o /home/ec2-user/environment/terraform-long-running-emr.zip "https://github.com/jagpk/ec2-spot-workshops/blob/emr-tf/workshops/running_spark_apps_with_emr_on_spot_instances/terraform-long-running-emr.zip"
+            - unzip /home/ec2-user/environment/terraform-long-running-emr.zip
+            - cd /home/ec2-user/environment/terraform-long-running-emr/
+            - !Sub sed -i.bak -e 's/<region>/${AWS::Region}/' /home/ec2-user/environment/terraform-long-running-emr/backend.tf
+            - !Sub sed -i.bak -e 's/<terraform-backend-bucket>/${TerraformBackendBucket}/' /home/ec2-user/environment/terraform-long-running-emr/backend.tf
+
+            - echo '=== Create EMR + MWAA Clusters ==='
+            - sudo -H -u ec2-user /usr/bin/terraform init
+            - sudo -H -u ec2-user /usr/bin/terraform apply --auto-approve
+            - . /home/ec2-user/.bash_profile
 
   C9BootstrapAssociation:
     Type: AWS::SSM::Association
@@ -378,10 +357,6 @@ Outputs:
         - Ref: C9Instance
         - "?region="
         - Ref: AWS::Region
-
-  SparkAppBucket:
-    Value: !Ref SparkAppBucket
-    Description: Bucket for the Spark application
 
   AthenaResultsBucket:
     Value: !Ref AthenaResultsBucket
