@@ -3,9 +3,9 @@ AWSTemplateFormatVersion: '2010-09-09'
 Description: AWS CloudFormation template to create a Cloud9 environment setup.
 Metadata:
   Author:
-    Description: Christian Melendez <chrismld@amazon.com>
+    Description: Jagdeep Phoolkumar <jphoolku@amazon.com> Christian Melendez <chrismld@amazon.com>
   License:
-    Description: 'Copyright 2022 Amazon.com, Inc. and its affiliates. All Rights Reserved.
+    Description: 'Copyright 2023 Amazon.com, Inc. and its affiliates. All Rights Reserved.
 
       Licensed under the Amazon Software License (the "License"). You may not use this file
       except in compliance with the License. A copy of the License is located at
@@ -30,7 +30,7 @@ Parameters:
     Description: "ARN of the Team Role"
     Default: NONE
     Type: String
-    ConstraintDescription: This is ONLY used Event Engine, dont change this if you are self-deploying the stack
+    ConstraintDescription: This is ONLY used Event Engine, don't change this if you are self-deploying the stack
 
 Conditions: 
   NotEventEngine: !Equals [!Ref EETeamRoleArn, NONE]
@@ -181,6 +181,26 @@ Resources:
                           time.sleep(5)
                           instance_state = ec2.describe_instances(InstanceIds=[instance['InstanceId']])
                         # logger.info('instance_state: {}'.format(instance_state))
+                      
+                      # removed any pre-attached instance profile
+                      instance_id = instance['InstanceId']
+
+                      response = ec2.describe_iam_instance_profile_associations(
+                          Filters=[
+                              {
+                                  'Name': 'instance-id',
+                                  'Values': [instance_id],
+                              },
+                          ],
+                      )
+
+                      if len(response['IamInstanceProfileAssociations']) > 0:
+                          for association in response['IamInstanceProfileAssociations']:
+                              if association['State'] == 'associated':
+                                  print("{} is active with state {}".format(association['AssociationId'], association['State']))
+                                  ec2.replace_iam_instance_profile_association(AssociationId=association['AssociationId'], IamInstanceProfile=iam_instance_profile)
+                      else:
+                          ec2.associate_iam_instance_profile(IamInstanceProfile=iam_instance_profile, InstanceId=instance_id)
 
                       # attach instance profile
                       response = ec2.associate_iam_instance_profile(IamInstanceProfile=iam_instance_profile, InstanceId=instance['InstanceId'])
@@ -298,6 +318,8 @@ Resources:
             - curl "https://ec2spotworkshops.com/running_spark_apps_with_emr_on_spot_instances/launching_emr_cluster-1.files/script.py" -o "script.py"
             - !Sub sudo -H -u ec2-user aws s3 cp script.py s3://${SparkAppBucket}
             - . /home/ec2-user/.bash_profile
+            - echo '=== Copy Terraform files to Cloud9 ==='            
+            - curl "https://ec2spotworkshops.com/running_spark_apps_with_emr_on_spot_instances/launching_emr_cluster-1.files/script.py" -o "script.py"
 
   C9BootstrapAssociation:
     Type: AWS::SSM::Association
