@@ -319,7 +319,8 @@ Resources:
             - !Sub sudo -H -u ec2-user aws s3 cp script.py s3://${SparkAppBucket}
             - . /home/ec2-user/.bash_profile
             - echo '=== Copy Terraform files to Cloud9 ==='            
-            - curl "https://ec2spotworkshops.com/running_spark_apps_with_emr_on_spot_instances/launching_emr_cluster-1.files/script.py" -o "script.py"
+            - curl "https://github.com/jagpk/ec2-spot-workshops/blob/emr-tf/workshops/running_spark_apps_with_emr_on_spot_instances/terraform-long-running.zip" -o "terraform-long-running.tar.gz"
+
 
   C9BootstrapAssociation:
     Type: AWS::SSM::Association
