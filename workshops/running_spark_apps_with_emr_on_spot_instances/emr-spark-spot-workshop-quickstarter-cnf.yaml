@@ -96,6 +96,7 @@ Resources:
             - ec2:AssociateIamInstanceProfile
             - ec2:ModifyInstanceAttribute
             - ec2:ReplaceIamInstanceProfileAssociation
+            - ec2:DescribeIamInstanceProfileAssociations
             - iam:ListInstanceProfiles
             - iam:PassRole
             Resource: "*"
@@ -143,7 +144,7 @@ Resources:
         ZipFile: |
           from __future__ import print_function
           import boto3
-          # import logging
+          import logging
           import json
           import os
           import time
@@ -193,7 +194,8 @@ Resources:
                               },
                           ],
                       )
-
+                      
+                      # attach instance profile
                       if len(response['IamInstanceProfileAssociations']) > 0:
                           for association in response['IamInstanceProfileAssociations']:
                               if association['State'] == 'associated':
@@ -202,8 +204,6 @@ Resources:
                       else:
                           ec2.associate_iam_instance_profile(IamInstanceProfile=iam_instance_profile, InstanceId=instance_id)
 
-                      # attach instance profile
-                      response = ec2.associate_iam_instance_profile(IamInstanceProfile=iam_instance_profile, InstanceId=instance['InstanceId'])
                       # logger.info('response - associate_iam_instance_profile: {}'.format(response))
                       r_ec2 = boto3.resource('ec2')
 
@@ -218,7 +218,7 @@ Resources:
     Type: AWS::S3::Bucket
     DeletionPolicy: Delete
     Properties: 
-      BucketName: !Join [ "-", ["terraform-backend", Ref: "AWS::AccountId"]] 
+      BucketName: !Join [ "-1-", ["terraform-backend", Ref: "AWS::AccountId"]] 
 
   AthenaResultsBucket:
     Type: AWS::S3::Bucket
@@ -290,7 +290,7 @@ Resources:
             - sudo yum -y install terraform
 
             - echo '=== Copy Terraform files to Cloud9 ==='
-            - sudo -H -u ec2-user curl --silent --location -o /home/ec2-user/environment/terraform-long-running-emr.zip "https://github.com/jagpk/ec2-spot-workshops/blob/emr-tf/workshops/running_spark_apps_with_emr_on_spot_instances/terraform-long-running-emr.zip"
+            - curl "https://github.com/jagpk/ec2-spot-workshops/blob/emr-tf/workshops/running_spark_apps_with_emr_on_spot_instances/terraform-long-running-emr.tar.gz" -o /home/ec2-user/environment/terraform-long-running-emr.tar.gz
             - unzip /home/ec2-user/environment/terraform-long-running-emr.zip
             - cd /home/ec2-user/environment/terraform-long-running-emr/
             - !Sub sed -i.bak -e 's/<region>/${AWS::Region}/' /home/ec2-user/environment/terraform-long-running-emr/backend.tf
